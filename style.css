@@ -1,0 +1,448 @@
+/* ==========================================================================
+   CSS STYLES & DESIGN TOKENS
+   ========================================================================== */
+:root {
+  /* Light Mode Palette (Soft Romantic Pastels) */
+  --bg-gradient: radial-gradient(circle at 20% 20%, #ffeef2 0%, #ffe3ec 35%, #f3e7fc 70%, #e0f2fe 100%);
+  --card-bg: rgba(255, 255, 255, 0.88);
+  --card-border: rgba(255, 255, 255, 0.95);
+  --card-shadow: 0 20px 50px rgba(236, 72, 153, 0.15), 0 10px 25px rgba(0, 0, 0, 0.05);
+  --text-main: #2d1822;
+  --text-muted: #835e72;
+  --tag-bg: rgba(244, 114, 182, 0.15);
+  --tag-text: #db2777;
+
+  /* Button Colors */
+  --yes-grad: linear-gradient(135deg, #ff4d8d 0%, #ff2a6d 50%, #f43f5e 100%);
+  --yes-shadow: 0 8px 24px rgba(244, 63, 94, 0.35);
+  --yes-glow: 0 0 35px rgba(255, 42, 109, 0.6);
+  --no-bg: #f1f5f9;
+  --no-text: #64748b;
+  --no-border: #cbd5e1;
+  --no-hover: #e2e8f0;
+
+  /* Controls */
+  --ctrl-bg: rgba(255, 255, 255, 0.85);
+  --ctrl-hover: #ffffff;
+  --ctrl-border: rgba(226, 232, 240, 0.8);
+  --ctrl-color: #475569;
+
+  /* Transitions */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark Mode Palette */
+body.dark-mode {
+  --bg-gradient: radial-gradient(circle at 20% 20%, #20132b 0%, #170d24 40%, #0d091a 100%);
+  --card-bg: rgba(30, 20, 42, 0.82);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(236, 72, 153, 0.15);
+  --text-main: #fdf2f8;
+  --text-muted: #d8b4e2;
+  --tag-bg: rgba(244, 114, 182, 0.2);
+  --tag-text: #f472b6;
+
+  --no-bg: #2d2238;
+  --no-text: #94a3b8;
+  --no-border: #4a385c;
+  --no-hover: #3b2d49;
+
+  --ctrl-bg: rgba(38, 26, 52, 0.85);
+  --ctrl-hover: rgba(56, 38, 77, 0.95);
+  --ctrl-border: rgba(255, 255, 255, 0.15);
+  --ctrl-color: #cbd5e1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Floating Canvas / Particles Layer */
+#ambientCanvas, #confettiCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#ambientCanvas {
+  z-index: 1;
+}
+
+#confettiCanvas {
+  z-index: 99;
+}
+
+/* Top Corner Controls (Mute & Theme Toggles) */
+.corner-controls {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  gap: 10px;
+  z-index: 50;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--ctrl-border);
+  background: var(--ctrl-bg);
+  color: var(--ctrl-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  touch-action: manipulation;
+}
+
+.icon-btn:hover {
+  background: var(--ctrl-hover);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.icon-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.icon-btn:focus-visible {
+  outline: 3px solid #ff4d8d;
+  outline-offset: 2px;
+}
+
+/* Main Container */
+.page-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* The Proposal Card */
+.card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 28px;
+  padding: 44px 36px;
+  text-align: center;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  animation: cardAppear 0.8s var(--spring) forwards;
+  transform-origin: center center;
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Recipient Badge & Greeting */
+.recipient-tag {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--tag-text);
+  background: var(--tag-bg);
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  animation: bounceIn 0.6s var(--spring);
+}
+
+.greeting-text {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* Big Headline Question */
+.question-headline {
+  font-family: 'Baloo 2', 'Fredoka', cursive, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 30px;
+  color: var(--text-main);
+  text-wrap: balance;
+}
+
+.thing-highlight {
+  background: linear-gradient(135deg, #ff2a6d 0%, #db2777 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+}
+
+/* Buttons Container */
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 84px;
+  position: relative;
+}
+
+/* Base Button Styles */
+.btn {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  touch-action: manipulation;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid #ff2a6d;
+  outline-offset: 3px;
+}
+
+/* The "YES" Button */
+.btn-yes {
+  background: var(--yes-grad);
+  color: #ffffff;
+  font-size: 1.25rem;
+  padding: 16px 36px;
+  box-shadow: var(--yes-shadow);
+  position: relative;
+  z-index: 20;
+  transform-origin: center center;
+  transition: transform 0.3s var(--spring), box-shadow 0.3s ease, filter 0.3s ease;
+  animation: heartbeat 1.5s infinite ease-in-out;
+}
+
+.btn-yes:hover {
+  box-shadow: var(--yes-glow);
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(var(--yes-scale, 1));
+  }
+  15% {
+    transform: scale(calc(var(--yes-scale, 1) * 1.08));
+  }
+  30% {
+    transform: scale(calc(var(--yes-scale, 1) * 0.98));
+  }
+  45% {
+    transform: scale(calc(var(--yes-scale, 1) * 1.05));
+  }
+}
+
+/* The "NO" Button */
+.btn-no {
+  background: var(--no-bg);
+  color: var(--no-text);
+  font-size: 1.15rem;
+  padding: 15px 30px;
+  border: 2px solid var(--no-border);
+  position: relative;
+  z-index: 25;
+  transform-origin: center center;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 0.3s ease,
+              background-color 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.btn-no:hover {
+  background: var(--no-hover);
+}
+
+/* Converted No button (Punchline final state) */
+.btn-no.as-yes {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border-color: #34d399 !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* Wobble animation for No button */
+.wobble {
+  animation: buttonWobble 0.45s ease-in-out;
+}
+
+@keyframes buttonWobble {
+  0% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(0deg); }
+  20% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(-14deg); }
+  40% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(12deg); }
+  60% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(-8deg); }
+  80% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(4deg); }
+  100% { transform: translate(var(--no-tx), var(--no-ty)) scale(var(--no-scale)) rotate(var(--no-rot)); }
+}
+
+/* Subtle Click Counter / Hint */
+.counter-hint {
+  margin-top: 24px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  opacity: 0.8;
+  min-height: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+/* Celebration Overlay State */
+.celebration-view {
+  display: none;
+  animation: celebrationPop 0.6s var(--spring) forwards;
+}
+
+@keyframes celebrationPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.celebration-emoji {
+  font-size: 4.5rem;
+  margin-bottom: 12px;
+  display: inline-block;
+  animation: floatEmoji 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatEmoji {
+  from { transform: translateY(0px) rotate(-4deg); }
+  to { transform: translateY(-12px) rotate(4deg); }
+}
+
+.celebration-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #ff1493 0%, #ff6b6b 50%, #ffa500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.celebration-subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  line-height: 1.4;
+}
+
+.btn-reset {
+  background: var(--no-bg);
+  color: var(--text-main);
+  border: 2px solid var(--no-border);
+  font-size: 1rem;
+  padding: 12px 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+}
+
+.btn-reset:hover {
+  background: var(--no-hover);
+  transform: translateY(-2px);
+}
+
+/* Screen reader announcement container */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 520px) {
+  .card {
+    padding: 34px 22px;
+    border-radius: 24px;
+  }
+  .question-headline {
+    font-size: 1.85rem;
+    margin-bottom: 24px;
+  }
+  .btn-yes {
+    font-size: 1.15rem;
+    padding: 14px 28px;
+  }
+  .btn-no {
+    font-size: 1.05rem;
+    padding: 13px 22px;
+  }
+  .celebration-title {
+    font-size: 2.2rem;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .btn-yes {
+    animation: none !important;
+  }
+  .wobble {
+    animation: none !important;
+  }
+}
